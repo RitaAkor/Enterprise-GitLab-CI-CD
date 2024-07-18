@@ -40,7 +40,7 @@ Automate enterprise software delivery with GitLab CI/CD pipeline. Deploying a  B
   Launch an EC2 Instance on AWS cloud platform:
 
 
-   Create an EC2 instance on AWS and give it a name of your choice,i used "corporate-dev".Configure the security group with the following inbound rules as  shown below.Choose a T2.large instance type,ensure storage is above 15GB,launch the instance and copy the public IP address of the instance.
+   Create an EC2 instance on AWS and give it a name of your choice,i used "corporate-dev".I used UBUNTU as my AMI.Configure the security group with the following inbound rules as  shown below.Choose a T2.large instance type,ensure storage is above 15GB,launch the instance and copy the public IP address of the instance.
   
  
   
@@ -61,6 +61,83 @@ by Navigating back to GitLab.See a message stating "You have registered a new ru
 Click on 'View runners' to see the newly created runner.
 
 # Build Pipeline on Gitlab
+  Build the pipeline on GitLab by navigating to yout Boardgame project,go to the Build section and access the Pipeline Editor to start build the stages.
+
+# Install all the tools: Trivy, JDK, Docker, Maven
+   This will be inputed on the build stage in gitlab as shown in the image below:
+   - Install Docker:               `sudo apt-get install -y docker.io` 
+   Manage Docker Permissions:By default, only root users have permission to run Docker commands. You can either: Add the current user to the Docker group:`sudo usermod -aG docker $USER` or change the permissions on the Docker socket to allow other users to execute Docker commands by using:`sudo chmod 666 /var/run/docker.sock`
+   - Install kubectl using Snap:   `sudo snap install kubectl --classic`
+   - Install Maven:                `sudo apt install -y maven`
+   - Install Trivy: by visiting the Trivy documentation website and navigate to the installation section to get the commands to install Trivy.
+     $ sudo vim /etc/yum.repos.d/trivy.repo
+     [trivy]
+     name=Trivy repository
+     baseurl=https://aquasecurity.github.io/trivy-repo/rpm/releases/$releasever/$basearch/
+     gpgcheck=0
+     enabled=1
+     $ sudo yum -y update  
+     $ sudo yum -y install trivy
+  Lastly include the 'TAG'(news-devs) section to define in the pipeline,that the stage is to run on the runneer configured.
+  
+  <img width="1280" alt="Screenshot 2024-07-18 at 20 23 24" src="https://github.com/user-attachments/assets/79500fd5-8b80-43b0-a78d-78d5e2e41d9f">
+  
+# Perform unit testing with MAVEN
+
+  To ensure that the code is functioning as expected we have to do automated tests.The "Unit Testing Stage" as shown the image below will catch any regressions or errors early in the development process before the code is deployed.
+  Click on the commit change and wait for the results by viewing on the pipeline.
+  This will install all the tools defined above.
+
+  <img width="1280" alt="Screenshot 2024-07-18 at 20 28 43" src="https://github.com/user-attachments/assets/ca3e691f-677c-4442-980a-5833d42a2cb2">
+ 
+  The completion image is below:
+
+
+  <img width="1280" alt="Screenshot 2024-07-18 at 20 34 34" src="https://github.com/user-attachments/assets/dff9c7ec-bd8b-46b1-b9f5-fdad6955d4d1">
+
+# Perform dependency check using Aqua Trivy
+
+  The trivy_fs_scan stage in the CI/CD pipeline is designed to perform a file system security scan using Trivy, a vulnerability scanner. This section in the build stage,specifies that the trivy_fs_scan job belongs to the security stage of your pipeline. The security stage is dedicated to tasks related to scanning and analyzing security vulnerabilities.The script section contains the commands that will be executed during this stage.
+  trivy fs --format table -o fs.html .: This command runs Trivy to scan the file system for vulnerabilities.
+  trivy fs: Invokes Trivy to perform a file system scan.
+--format table: Specifies the output format of the scan results. In this case, the results will be displayed in a table format.
+-o fs.html: Directs Trivy to save the scan results to a file named fs.html in HTML format. This allows for easy viewing and sharing of the scan results.
+.: Indicates the current directory as the target for the scan. Trivy will scan the entire file system starting from this directory
+
+  <img width="1280" alt="Screenshot 2024-07-18 at 20 41 25" src="https://github.com/user-attachments/assets/252680a7-89e5-4fdd-a783-0b6e8d391552">
+
+# Perform SonarQube for quality check and code coverage
+
+  For sonarqube,the first thing to do since docker is already installed on the terminal through the pipeline is to run this command: `Docker run -d -p   9000:9000 nsonarqube:lts-community.
+  The docker run: Starts a new Docker container.
+  -d: Runs the container in the background (detached mode).
+  -p 9000:9000: Maps port 9000 of the container to port 9000 on your host machine, making SonarQube accessible at http://localhost:9000.
+  sonarqube:lts-community: Specifies the Docker image and tag for SonarQube’s LTS Community Edition.
+
+ To access SonarQube, copy the IP address of the EC2 instance (named corporate-dev) from AWS, paste it into your browser, and append the port 9000. SonarQube will start, and you'll be able to configure it so that reports can be pushed to the SonarQube server through the pipeline.
+  Configuration Steps;
+    - Log In: Access SonarQube and log in with the username admin and password admin. Change the password to something secure.
+    - Setup Integration with GitLab:
+    - Go to the SonarQube settings.
+    - Choose the GitLab option.
+    - Enter a configuration name of your choice.
+    - For GitLab API URL, use: https://gitlab.com/api/v4.
+    - Generate a Personal Access Token:
+    - Navigate to GitLab, then go to Settings > Access Tokens.
+    - Click on Add New Token.
+    - Provide a name for the token.
+    - Select the Reporter role under Scopes (or choose scopes based on your requirements).
+    - Copy the generated token and paste it into the SonarQube configuration for the Personal Access Token.
+    
+  After configuratoion 
+
+  
+
+
+  
+  
+  
+  
 
   
 
