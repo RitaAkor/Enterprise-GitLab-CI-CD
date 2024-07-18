@@ -20,7 +20,7 @@ Automate enterprise software delivery with GitLab CI/CD pipeline. Deploying a  B
 * Perform dependency check using Aqua Trivy
 * Perform SonarQube for quality check and code coverage
 * Build the application to create an artifact with MAVEN
-* Build the Docker image of the application using Docker
+* Build the Docker image of the application using Docker and push
 * Scan the Docker image using Aqua Trivy for any vulnerability
 * Use YAML manifest files to deploy the application to a Kubernetes cluster
 
@@ -129,12 +129,51 @@ Click on 'View runners' to see the newly created runner.
     - Select the Reporter role under Scopes (or choose scopes based on your requirements).
     - Copy the generated token and paste it into the SonarQube configuration for the Personal Access Token.
     
-  After configuratoion 
+  After configuration,it will prmpt options to analyze your project,i used the Gitlab CI.Create a sonar.project.properties and add the provided command on the file.
+  <img width="1280" alt="Screenshot 2024-07-18 at 21 07 18" src="https://github.com/user-attachments/assets/7e172ef2-240f-4856-adba-628cc2eb025e">.
+
+  The next step is to add environment variables by creating two tokens.The first SonarQube Token and SOnarQube Host Url.Uncheck the protect variable ehile this is been created.
+  This will automatically generate the code for the sonarqube build stage as seen below;
+
+  <img width="1280" alt="Screenshot 2024-07-18 at 21 13 05" src="https://github.com/user-attachments/assets/bd4377de-ab20-4e1b-bb38-d7659c9ad13b">
+  
+  Commit stage,see status shown below.
+
+   <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+  <img src="https://github.com/user-attachments/assets/f609dbff-7328-4266-be3a-329e1eff85ac" width="400" alt="Screenshot 2024-07-18 at 21 14 09" style="flex: 1; margin-right: 10px;" />
+  <img src="https://github.com/user-attachments/assets/83674e7e-c8f3-4005-8b3e-8894f1caa222" width="400" alt="Screenshot 2024-07-18 at 21 15 33" style="flex: 1; margin-left: 10px;" />
+</div>
+
+# Build the Docker image of the application using Docker
+
+ In this stage, we will create a script for logging in by using Docker credentials. Instead of hardcoding these credentials directly into the script, we will define them as environment variables for security reasons.
+
+ To do this:
+
+Navigate to Settings > CI/CD in your project.
+Add the necessary variables (e.g., DOCKER_USERNAME and DOCKER_PASSWORD) with their respective values (username and password).
+This approach ensures that sensitive information is securely managed.
+Include mvn package in the script,because the artifcate might not be available to docker
+Run the command:Docker build  `-t` for taging (your username) and tag- This is show below for understanding.
+Finally Pushing the image
+
+  <img width="1273" alt="Screenshot 2024-07-18 at 21 25 45" src="https://github.com/user-attachments/assets/eec4df73-cb28-40f7-bc62-c40707129744">
+
+  <img width="1278" alt="Screenshot 2024-07-18 at 21 32 29" src="https://github.com/user-attachments/assets/ca0ea55a-d6b8-46d6-a7b9-97aed7e3cc2a">
+
+  Commit the changes to see status,results of mine as shown below;
+
+<img width="1280" alt="Screenshot 2024-07-18 at 21 34 28" src="https://github.com/user-attachments/assets/1c649745-75a1-483e-84cc-f5d9bda3abc9">
 
   
 
 
-  
+
+
+
+
+
+
   
   
   
