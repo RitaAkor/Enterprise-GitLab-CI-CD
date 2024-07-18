@@ -161,9 +161,40 @@ Finally Pushing the image
 
   <img width="1278" alt="Screenshot 2024-07-18 at 21 32 29" src="https://github.com/user-attachments/assets/ca0ea55a-d6b8-46d6-a7b9-97aed7e3cc2a">
 
-  Commit the changes to see status,results of mine as shown below;
+  Commit the changes to see status,see result below;
 
 <img width="1280" alt="Screenshot 2024-07-18 at 21 34 28" src="https://github.com/user-attachments/assets/1c649745-75a1-483e-84cc-f5d9bda3abc9">
+
+#  Scan the Docker image using Aqua Trivy for any vulnerability
+
+  In this stage, I set up a self-hosted Kubernetes cluster using two Ubuntu virtual machines on AWS, named k8-master and k8-slave. After launching the   instances,i connected via Tabby terminal, update the packages with sudo apt update, and install Kubernetes components (kubectl, kubelet, kubeadm) on all   nodes.Setting up a self-hosted Kubernetes cluster allows for managing containerized applications across multiple nodes. kubectl, kubelet, and kubeadm are   essential tools for managing and maintaining the cluster.
+
+  First, create a file with any name (e.g., 1.sh), make it executable, and paste the commands for downloading kubectl, kubelet, and kubeadm obtained from the   Kubernetes documentation website.See image below;
+
+<img width="798" alt="Screenshot 2024-07-18 at 21 46 25" src="https://github.com/user-attachments/assets/dc4119ef-cc1d-49bb-b42b-ee24cc099d0e">
+
+Additionally, to connect the slave machine to the master node, run the command `sudo kubeadm init --pod-network-cidr=10.244.0.0/16 on the master node`. This command initializes the Kubernetes cluster and generates a token used for authenticating the connection of the slave machine to the master node.
+
+Next step,is to create a directory on the `.kube` folder
+change permission: `sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config`
+To change ownership: `sudo chown $(id -u):$(id -g) $HOME /.kube/config`
+
+Finally, convert the kubeconfig file into a Base64-encoded format. Use the cat kubeconfig command to display its contents, then paste the output into the `echo -n ''` command and run it.
+
+#  Use YAML manifest files to deploy the application to a Kubernetes cluster
+
+In the final stage, go to the CI/CD settings, navigate to the build stage, and create a kubeconfig path. Create a folder and add a variable named KUBECONFIG_CONTENT. Copy the content of the kubeconfig file from the terminal and paste it into the GitLab build section under this variable.Replace docker image to the docker image created.
+See attached image:
+
+<img width="1280" alt="Screenshot 2024-07-18 at 21 57 45" src="https://github.com/user-attachments/assets/03d344f9-724a-4f7e-96d7-c3b11e3399d6">
+
+Finally make deployment 
+
+<img width="1280" alt="Screenshot 2024-07-18 at 22 05 59" src="https://github.com/user-attachments/assets/7b9f1052-ee69-46d0-975f-6a9a83487d13">
+
+
+
+
 
   
 
