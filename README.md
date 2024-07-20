@@ -2,6 +2,9 @@
 Automate enterprise software delivery with GitLab CI/CD pipeline. Deploying a  Board Game Database Full-Stack Web App on AWS EC2. Streamline code push, tool installation, testing, Docker image build, Aqua Trivy scan, and Kubernetes deployment using YAML manifests.
 
 # Project Architecture
+![Your paragraph text](https://github.com/user-attachments/assets/0deb2aa0-e0a7-4ecb-9c78-cb989287516d)
+
+
 
 # The Setup Environment(Technologies)
 1. Gitlab
@@ -188,7 +191,7 @@ See attached image:
 
 <img width="1280" alt="Screenshot 2024-07-18 at 21 57 45" src="https://github.com/user-attachments/assets/03d344f9-724a-4f7e-96d7-c3b11e3399d6">
 
-Finally make deployment 
+Copy IP address and port number.Finally,what it looks like below!
 
 <img width="1280" alt="Screenshot 2024-07-18 at 22 05 59" src="https://github.com/user-attachments/assets/7b9f1052-ee69-46d0-975f-6a9a83487d13">
 
